@@ -9,8 +9,12 @@ Then add a Linux Partition
 
 ```sh
 sudo losetup -fP ./test.iso
+sudo mkfs.btrfs /dev/loop0p1
 sudo mkdir /mnt/test
 sudo mount /dev/loop0p1 /mnt/test
 ```
 
 Then start creating files like it's any other drive.
+
+# Making the data dump
+
