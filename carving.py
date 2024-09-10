@@ -75,7 +75,7 @@ class Carver:
                 except Exception as e:
                     print("Unexpected error occurred.")
 
-with open('test2.gif','rb') as file:
+with open('test.gif','rb') as file:
     zip_extractors = GIFExtractor(file.read())
     zip_extractors.extract_file('recover.gif')
             
