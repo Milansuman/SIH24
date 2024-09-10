@@ -31,6 +31,10 @@ magic_nums = {
     ),
     "PDF":(
         b'\x25\x50\x44\x46\x2D',
+    ),
+    "TIF":(
+        b'\x49\x49\x2A\x00',
+        b'\x4D\x4D\x00\x2A'
     )
 
 }
@@ -75,6 +79,7 @@ class Carver:
                             case "PDF":
                                 pdf_extractor = pdf.PDFExtractor(self.data[match.start():])
                                 pdf_extractor.extract_file(f"extracted_{match.start()}.pdf")
+                            
                             
 
 
