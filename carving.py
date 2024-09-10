@@ -2,11 +2,7 @@
 FILE CARVING MODULE
 """
 import re
-<<<<<<< HEAD
-from extractors import html, jpg, png, zip, rar,gif,pdf,ppt,tif,odt,xls
-=======
-from extractors import html, jpg, png, zip, rar,gif,pdf,ppt,tif,odt,docx
->>>>>>> 6bbce0cbee7c02a8c0af675c01c666d1134dcf90
+from extractors import html, jpg, png, zip, rar,gif,pdf,ppt,tif,odt,docx,xls
 
 magic_nums = {
     "JPG": (
