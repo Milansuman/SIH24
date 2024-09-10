@@ -75,8 +75,6 @@ class Carver:
                             case "PDF":
                                 pdf_extractor = pdf.PDFExtractor(self.data[match.start():])
                                 pdf_extractor.extract_file(f"extracted_{match.start()}.pdf")
-                            
-
 
                 except Exception as e:
                     print(f"Unexpected error occurred. {e}")
