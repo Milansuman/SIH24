@@ -1,5 +1,5 @@
 import re
-class TIFFExtractor:
+class TIFExtractor:
     def __init__(self, partial_data):
         self.data = partial_data
         self.possible_ends = []
