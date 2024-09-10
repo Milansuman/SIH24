@@ -28,12 +28,10 @@ magic_nums = {
     ),
     "PPT":(
         b'\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1',
-),"%PDF":(
-        b'\x25\x50\x44\x46',
-),
+),"PDF":(
+        b'%PDF-',
+)
 
-
-    
 }
 
 class Carver:
