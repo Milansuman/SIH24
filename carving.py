@@ -3,6 +3,7 @@ FILE CARVING MODULE
 """
 import re
 
+
 magic_nums = {
     "JPG": (
         b'\xFF\xD8\xFF\xD8',
@@ -36,6 +37,21 @@ class JPGExtractor:
     def extract_file(self, path):
         with open(path, "wb") as file:
             file.write(self.data[:self.possible_ends[0]])
+
+class PNGExtractor:
+    def __init__(self, partial_data):
+        self.data = partial_data
+        self.possible_ends = []
+
+        for match in re.finditer(b'\x49\x45\x4e\x44\xae\x42\x60\x82', partial_data):
+            self.possible_ends.append(match.start())
+
+        print(self.possible_ends)
+
+    def extract_file(self, path):
+        with open(path, "wb") as file:
+            file.write(self.data[:self.possible_ends[0]]+8)
+
 
 class ZIPExtractor:
     def __init__(self, partial_data):
@@ -91,14 +107,11 @@ class Carver:
                     for match in re.finditer(byte_string, self.data):
                         print(f"{file_type}: {match.start()}")
 
-                        if file_type == "JPG":
-                            jpg_extractor = JPGExtractor(self.data[match.start():])
-                            jpg_extractor.extract_file(f"extracted_{match.start()}.jpg")
-                        elif file_type == "ZIP":
-                            zip_extractor = ZIPExtractor(self.data[match.start():])
-                            zip_extractor.extract_file(f"extracted_{match.start()}.zip")
+                        # if file_type == "JPG":
+                        #     jpg_extractor = JPGExtractor(self.data[match.start():])
+                        #     jpg_extractor.extract_file(f"extracted_{match.start()}.jpg")
+                        # elif file_type == "ZIP":
+                        #     zip_extractor = ZIPExtractor(self.data[match.start():])
+                        #     zip_extractor.extract_file(f"extracted_{match.start()}.zip")
                 except Exception as e:
                     print("Unexpected error occurred.")
-            
-carver = Carver("../test.iso")
-carver.extractFiles()
