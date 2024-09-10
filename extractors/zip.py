@@ -1,3 +1,5 @@
+import re
+
 class ZIPExtractor:
     def __init__(self, partial_data):
         self.data = partial_data
