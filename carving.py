@@ -2,7 +2,7 @@
 FILE CARVING MODULE
 """
 import re
-from extractors import html, jpg, png, zip,rar,gif,pdf,ppt,tif,odt,docx,xls,xlsx
+from extractors import html, jpg, png, zip,rar,gif,pdf,ppt,tif,odt,docx,xls,xlsx,odp,ods
 
 magic_nums = {
     "JPG": (
@@ -112,6 +112,12 @@ class Carver:
                             case "XLSX":
                                 xlsx_extractor = xlsx.XLSXExtractor(self.data[match.start():])
                                 xlsx_extractor.extract_file(f"extracted_{match.start()}.xlsx")
+                            case "ODP":
+                                odp_extractor = odp.ODPExtractor(self.data[match.start():])
+                                odp_extractor.extract_file(f"extracted_{match.start()}.odp")
+                            case "ODS":
+                                ods_extractor = ods.ODSExtractor(self.data[match.start():])
+                                ods_extractor.extract_file(f"extracted_{match.start()}.ods")
 
                 except Exception as e:
                     print(f"Unexpected error occurred. {e}")
