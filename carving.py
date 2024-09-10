@@ -28,9 +28,10 @@ magic_nums = {
     ),
     "PPT":(
         b'\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1',
-),"PDF":(
-        b'%PDF-',
-)
+    ),
+    "PDF":(
+        b'\x25\x50\x44\x46\x2D',
+    )
 
 }
 
@@ -58,6 +59,6 @@ class Carver:
                         # elif file_type == "ZIP":
                         #     zip_extractor = ZIPExtractor(self.data[match.start():])
                         #     zip_extractor.extract_file(f"extracted_{match.start()}.zip")
-                        
+
                 except Exception as e:
                     print("Unexpected error occurred.")
