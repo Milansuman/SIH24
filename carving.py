@@ -51,7 +51,10 @@ magic_nums = {
     ),
     "XLSX": (
         b'\x50\x4B\x03\x04\x14\x00\x06\x00',
-    )
+    ),
+    "ODP": (
+        b'PK\x03\x04\x14\x00\x00\x00\x00\x00',
+    ),
 }
 
 class Carver:
