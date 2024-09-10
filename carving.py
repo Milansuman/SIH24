@@ -2,6 +2,7 @@
 FILE CARVING MODULE
 """
 import re
+from extractors import html, jpg, png, zip
 
 magic_nums = {
     "JPG": (
@@ -22,71 +23,6 @@ magic_nums = {
         b'<!doctype html>'
     )
 }
-
-class JPGExtractor:
-    def __init__(self, partial_data):
-        self.data = partial_data
-        self.possible_ends = []
-
-        for match in re.finditer(b'\xFF\xD9', partial_data):
-            self.possible_ends.append(match.start())
-
-        print(self.possible_ends)
-    
-    def extract_file(self, path):
-        with open(path, "wb") as file:
-            file.write(self.data[:self.possible_ends[0]])
-
-class PNGExtractor:
-    def __init__(self, partial_data):
-        self.data = partial_data
-        self.possible_ends = []
-
-        for match in re.finditer(b'\x49\x45\x4e\x44\xae\x42\x60\x82', partial_data):
-            self.possible_ends.append(match.start())
-
-        print(self.possible_ends)
-
-    def extract_file(self, path):
-        with open(path, "wb") as file:
-            file.write(self.data[:self.possible_ends[0]]+8)
-
-
-class ZIPExtractor:
-    def __init__(self, partial_data):
-        self.data = partial_data
-        self.possible_ends = []
-
-        for match in re.finditer(b'\x50\x4B\x05\x06', partial_data):
-            self.possible_ends.append(match.start())
-
-        print(self.possible_ends)
-    
-    def extract_file(self, path):
-        if self.possible_ends:
-            with open(path, "wb") as file:
-                # Write data up to and including the End of Central Directory record
-                file.write(self.data[:self.possible_ends[-1] + 22])
-        else:
-            print("No valid ZIP end structure found")
-        
-class HTMLExtractor:
-    def __init__(self, partial_data):
-        self.data = partial_data
-        self.possible_ends = []
-
-        for match in re.finditer(b'</html>', partial_data):
-            self.possible_ends.append(match.start())
-
-        print(self.possible_ends)
-    
-    def extract_file(self, path):
-        if self.possible_ends:
-            with open(path, "wb") as file:
-                # Write data up to and including the End of Central Directory record
-                file.write(self.data[:self.possible_ends[-1] + 22])
-        else:
-            print("No valid ZIP end structure found")
 
 class Carver:
     def __init__(self, path):
