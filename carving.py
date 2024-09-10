@@ -55,6 +55,11 @@ magic_nums = {
     "ODP": (
         b'PK\x03\x04\x14\x00\x00\x00\x00\x00',
     ),
+    "ODS": (
+         b'PK\x03\x04',
+        b'PK\x05\x06',
+
+    )
 }
 
 class Carver:
