@@ -2,7 +2,7 @@ import sys
 from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
                                QHBoxLayout, QPushButton, QLabel, QStackedWidget,
                                QComboBox, QFileDialog, QProgressBar, QTextEdit)
-from PySide6.QtGui import QPixmap, QFont, QPainter, QColor
+from PySide6.QtGui import QPixmap, QFont, QPainter, QColor,QIcon
 from PySide6.QtCore import Qt, QSize
 
 class BackgroundWidget(QWidget):
@@ -245,7 +245,10 @@ if __name__ == "__main__":
     
     # Load Roboto font
     QFont.insertSubstitution("Roboto", "Arial")
+    icon = QIcon("favicon.jpg")
+   
     
     window = MainWindow()
+    window.setWindowIcon(icon)
     window.show()
     sys.exit(app.exec())
