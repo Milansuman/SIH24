@@ -14,4 +14,18 @@ magic_nums = {
 class Carver:
     def __init__(self, path):
         self.path = path
-        
+        self.data = b''
+        self.indexes = []
+    
+    def readData(self):
+        with open(self.path, "rb") as file:
+            self.data = file.read()
+    
+    def findOffsets(self):
+        for file_type in magic_nums:
+            for byte_string in magic_nums[file_type]:
+                print(self.data.find(byte_string))
+            
+carver = Carver("../test.iso")
+carver.readData()
+carver.findOffsets()
