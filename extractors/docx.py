@@ -17,7 +17,3 @@ class DOCXExtractor:
                 file.write(self.data[:self.possible_ends[-1] + 22])
         else:
             print("No valid ZIP end structure found")
-
-with open("bleh.docx", "rb") as file:
-    doc = DOCXExtractor(file.read())
-    doc.extract_file("test.docx")
