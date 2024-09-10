@@ -30,8 +30,11 @@ magic_nums = {
         b'\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1',
 ),"PDF":(
         b'%PDF-',
-)
-
+),"CSV": (
+        b',,,', 
+        b'\r\n,',  
+        b'\n,'     
+    )
 }
 
 class Carver:
