@@ -33,12 +33,19 @@ class JPGExtractor:
     
     def extract_file(self, path):
         with open(path, "wb") as file:
-            file.write(self.data[:self.possible_ends[0]])
+            file.write(self.data[:self.possible_ends[0]+2])
 
 class PNGExtractor:
     def __init__(self, partial_data):
         self.data = partial_data
-        
+        self.possible_ends = []
+
+        for match in re.finditer(b'\x49\x45\x4e\x44\xae\x42\x60\x82', partial_data):
+            self.possible_ends.append(match.start())
+    
+    def extract_file(self, path):
+        with open(path, "wb") as file:
+            file.write(self.data[:self.possible_ends[0]+8])
         
 class HTMLExtractor:
     def __init__(self, partial_data):
@@ -75,8 +82,8 @@ class Carver:
                         if file_type == "JPG":
                             jpg_extractor = JPGExtractor(self.data[match.start():])
                             jpg_extractor.extract_file("test.jpg")
+                        elif file_type == "PNG":
+                            png_extractor = PNGExtractor(self.data[match.start():])
+                            png_extractor.extract_file("test.png")
                 except Exception as e:
-                    print("Unexpected error occurred.")
-            
-carver = Carver("../test.iso")
-carver.extractFiles()
+                    print(f"Unexpected error occurred. {e}")
