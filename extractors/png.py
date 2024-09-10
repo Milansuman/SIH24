@@ -12,4 +12,4 @@ class PNGExtractor:
 
     def extract_file(self, path):
         with open(path, "wb") as file:
-            file.write(self.data[:self.possible_ends[0]]+8)
+            file.write(self.data[:self.possible_ends[0]+8])
