@@ -53,13 +53,13 @@ class Carver:
         self.path = path
         self.data = b''
         self.indexes = []
+        self.readData()
     
     def readData(self):
         with open(self.path, "rb") as file:
-            self.data = file.read()
-            
+            self.data = file.read()      
     
-    def findOffsets(self):
+    def extractFiles(self):
         for file_type in magic_nums:
             for byte_string in magic_nums[file_type]:
                 try:
@@ -72,6 +72,5 @@ class Carver:
                 except Exception as e:
                     print("Unexpected error occurred.")
             
-with open("test.html", 'rb') as file:
-    html_extractor = HTMLExtractor(file.read())
-    html_extractor.extract_file("recover.html")
+carver = Carver("../test.iso")
+carver.extractFiles()
