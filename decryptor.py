@@ -222,6 +222,12 @@ class MainApplicationScreen(QWidget):
         self.log_area.append(f'<span style="color: {color};">{message}</span>')
         self.log_area.ensureCursorVisible()
 
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setBrush(brush=QBrush(QColor(255, 255, 255)))
+
+        painter.drawRect(self.rect())
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -245,6 +251,12 @@ class MainWindow(QMainWindow):
 
     def switch_to_main_screen(self):
         self.stacked_widget.setCurrentWidget(self.main_app_screen)
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setBrush(QColor(255, 255, 255))
+
+        painter.drawRect(self.rect())
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
