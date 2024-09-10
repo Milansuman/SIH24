@@ -2,7 +2,7 @@ import sys
 from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
                                QHBoxLayout, QPushButton, QLabel, QStackedWidget,
                                QComboBox, QFileDialog, QProgressBar, QTextEdit)
-from PySide6.QtGui import QPixmap, QFont, QPainter, QColor,QIcon
+from PySide6.QtGui import QPixmap, QFont, QPainter, QColor,QIcon, QBrush
 from PySide6.QtCore import Qt, QSize
 
 class BackgroundWidget(QWidget):
@@ -74,6 +74,12 @@ class OnboardingScreen(QWidget):
 
     def on_get_started(self):
         self.parent().parent().switch_to_main_screen()
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setBrush(brush=QBrush(QColor(255, 255, 255)))
+
+        painter.drawRect(self.rect())
 
 class MainApplicationScreen(QWidget):
     def __init__(self, parent=None):
