@@ -2,7 +2,7 @@
 FILE CARVING MODULE
 """
 import re
-from extractors import html, jpg, png, zip, rar,gif,pdf,ppt,tif,odt,docx
+from extractors import html, jpg, png, zip,rar,gif,pdf,ppt,tif,odt,docx,xls
 
 magic_nums = {
     "JPG": (
@@ -45,8 +45,10 @@ magic_nums = {
     "RAR": (
         b'\x52\x61\x72\x21\x1A\x07\x00',
         b'\x52\x61\x72\x21\x1A\x07\x01\x00'
+    ),
+    "XLS":(
+         b'\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1',
     )
-
 }
 
 class Carver:
@@ -95,9 +97,15 @@ class Carver:
                             case "ODT":
                                 odt_extractor = odt.ODTExtractor(self.data[match.start():])
                                 odt_extractor.extract_file(f"extracted_{match.start()}.odt")
+                            case "XLS":
+                                xls_extractor = xls.XLSExtractor(self.data[match.start():])
+                                xls_extractor.extract_file(f"extracted_{match.start()}.xls")
                             case "DOCX":
                                 docx_extractor = docx.DOCXExtractor(self.data[match.start():])
                                 docx_extractor.extract_file(f"extracted_{match.start()}.docx")
+                            case "RAR":
+                                rar_extractor = rar.RARExtractor(self.data[match.start():])
+                                rar_extractor.extract_file(f"extracted_{match.start()}.rar")
                             
 
 
