@@ -53,19 +53,13 @@ class Carver:
                     for match in re.finditer(byte_string, self.data):
                         print(f"{file_type}: {match.start()}")
 
-                        # if file_type == "JPG":
-                        #     jpg_extractor = JPGExtractor(self.data[match.start():])
-                        #     jpg_extractor.extract_file(f"extracted_{match.start()}.jpg")
-                        # elif file_type == "ZIP":
-                        #     zip_extractor = ZIPExtractor(self.data[match.start():])
-                        #     zip_extractor.extract_file(f"extracted_{match.start()}.zip")
                         match file_type:
                             case "JPG":
                                 jpg_extractor = jpg.JPGExtractor(self.data[match.start():])
                                 jpg_extractor.extract_file(f"extracted_{match.start()}.jpg")
                             case "PNG":
                                 png_extractor = png.PNGExtractor(self.data[match.start():])
-                                png_extractor.extract_file(f"extracted_{match.start()}.jpg")
+                                png_extractor.extract_file(f"extracted_{match.start()}.png")
                             case "ZIP":
                                 zip_extractor = zip.ZIPExtractor(self.data[match.start():])
                                 zip_extractor.extract_file(f"extracted_{match.start()}.zip")
@@ -85,4 +79,4 @@ class Carver:
 
 
                 except Exception as e:
-                    print("Unexpected error occurred.")
+                    print(f"Unexpected error occurred. {e}")
