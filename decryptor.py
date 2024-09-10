@@ -3,7 +3,18 @@ from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,
                                QHBoxLayout, QPushButton, QLabel, QStackedWidget,
                                QComboBox, QFileDialog, QProgressBar, QTextEdit)
 from PySide6.QtGui import QPixmap, QFont, QPainter, QColor,QIcon, QBrush
-from PySide6.QtCore import Qt, QSize
+from PySide6.QtCore import Qt, QSize, QObject, Signal, QThread
+
+from carving import Carver
+
+class Worker(QObject):
+    finished = Signal()
+    progress = Signal(int)
+
+    def run(self, disk):  
+        carver = Carver(disk)
+        carver.extractFiles()
+        self.finished.emit()
 
 class BackgroundWidget(QWidget):
     def __init__(self, parent=None):
@@ -77,7 +88,7 @@ class OnboardingScreen(QWidget):
 
     def paintEvent(self, event):
         painter = QPainter(self)
-        painter.setBrush(brush=QBrush(QColor(255, 255, 255)))
+        painter.setBrush(QColor(255, 255, 255))
 
         painter.drawRect(self.rect())
 
@@ -185,10 +196,23 @@ class MainApplicationScreen(QWidget):
         """)
 
     def browse_disk(self):
-        disk = QFileDialog.getExistingDirectory(self, "Select Disk")
+        disk = QFileDialog.getOpenFileUrl(self, "Select Disk")
         if disk:
-            self.disk_label.setText(f"Selected Disk: {disk}")
+            self.disk_label.setText(f"Selected Disk: {disk[0].toLocalFile()}")
             self.log_message(f"Disk selected: {disk}")
+
+    def start_thread(self, disk):
+        self.thread = QThread()
+        self.worker = Worker()
+
+        self.worker.moveToThread(self.thread)
+        self.thread.started.connect(lambda: self.worker.run(disk))
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+
+        self.thread.start()
+        self.log_message("Recovery completed successfully!", "success")
 
     def start_recovery(self):
         disk = self.disk_label.text().replace("Selected Disk: ", "")
@@ -200,17 +224,7 @@ class MainApplicationScreen(QWidget):
             return
 
         self.log_message(f"Starting recovery: {file_format} files from {disk} using {method}")
-        self.progress_bar.setVisible(True)
-        self.progress_bar.setValue(0)
-
-        # Simulated recovery process
-        for i in range(101):
-            self.progress_bar.setValue(i)
-            if i % 20 == 0:
-                self.log_message(f"Recovery progress: {i}%")
-            QApplication.processEvents()  # Ensures the GUI updates
-
-        self.log_message("Recovery completed successfully!", "success")
+        self.start_thread(disk)
 
     def log_message(self, message, level="info"):
         color = "#2c3e50"  # Default color (dark gray)
@@ -224,7 +238,7 @@ class MainApplicationScreen(QWidget):
 
     def paintEvent(self, event):
         painter = QPainter(self)
-        painter.setBrush(brush=QBrush(QColor(255, 255, 255)))
+        painter.setBrush(QColor(255, 255, 255))
 
         painter.drawRect(self.rect())
 

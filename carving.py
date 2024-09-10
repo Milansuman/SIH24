@@ -23,7 +23,7 @@ magic_nums = {
         b'<!doctype html>'
     ),
     "DOCX": (
-        b'\x50\x4B\x03\x04\x14\x00\x06\x00'
+        b'\x50\x4B\x03\x04\x14\x00\x06\x00',
     ),
     "GIF": (
         b'\x47\x49\x46\x38\x37\x61',
@@ -35,10 +35,10 @@ magic_nums = {
     "PDF":(
         b'\x25\x50\x44\x46\x2D',
     ),
-    "TIF":(
-        b'\x49\x49\x2A\x00',
-        b'\x4D\x4D\x00\x2A'
-    ),
+    # "TIF":(
+    #     b'\x49\x49\x2A\x00',
+    #     b'\x4D\x4D\x00\x2A'
+    # ),
     "ODT":(
          b'PK\x03\x04\x14\x00\x00\x00\x00\x00',
     ),
@@ -94,9 +94,9 @@ class Carver:
                             case "PDF":
                                 pdf_extractor = pdf.PDFExtractor(self.data[match.start():])
                                 pdf_extractor.extract_file(f"extracted_{match.start()}.pdf")
-                            case "TIF":
-                                tif_extractor = tif.TIFExtractor(self.data[match.start():])
-                                tif_extractor.extract_file(f"extracted_{match.start()}.tif")
+                            # case "TIF":
+                            #     tif_extractor = tif.TIFExtractor(self.data[match.start():])
+                            #     tif_extractor.extract_file(f"extracted_{match.start()}.tif")
                             case "ODT":
                                 odt_extractor = odt.ODTExtractor(self.data[match.start():])
                                 odt_extractor.extract_file(f"extracted_{match.start()}.odt")
