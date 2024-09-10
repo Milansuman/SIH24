@@ -2,7 +2,7 @@ import sys
 from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
                                QHBoxLayout, QPushButton, QLabel, QStackedWidget,
                                QComboBox, QFileDialog, QProgressBar, QTextEdit)
-from PySide6.QtGui import QPixmap, QFont, QPainter, QColor,QIcon
+from PySide6.QtGui import QPixmap, QFont, QPainter, QColor,QIcon, QBrush
 from PySide6.QtCore import Qt, QSize
 
 class BackgroundWidget(QWidget):
@@ -74,6 +74,12 @@ class OnboardingScreen(QWidget):
 
     def on_get_started(self):
         self.parent().parent().switch_to_main_screen()
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setBrush(brush=QBrush(QColor(255, 255, 255)))
+
+        painter.drawRect(self.rect())
 
 class MainApplicationScreen(QWidget):
     def __init__(self, parent=None):
@@ -216,6 +222,12 @@ class MainApplicationScreen(QWidget):
         self.log_area.append(f'<span style="color: {color};">{message}</span>')
         self.log_area.ensureCursorVisible()
 
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setBrush(brush=QBrush(QColor(255, 255, 255)))
+
+        painter.drawRect(self.rect())
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -239,6 +251,12 @@ class MainWindow(QMainWindow):
 
     def switch_to_main_screen(self):
         self.stacked_widget.setCurrentWidget(self.main_app_screen)
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setBrush(QColor(255, 255, 255))
+
+        painter.drawRect(self.rect())
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

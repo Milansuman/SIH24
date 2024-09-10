@@ -112,8 +112,6 @@ class Carver:
                             case "XLSX":
                                 xlsx_extractor = xlsx.XLSXExtractor(self.data[match.start():])
                                 xlsx_extractor.extract_file(f"extracted_{match.start()}.xlsx")
-                            
-
 
                 except Exception as e:
                     print(f"Unexpected error occurred. {e}")
