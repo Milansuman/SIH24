@@ -59,6 +59,13 @@ magic_nums = {
          b'PK\x03\x04',
         b'PK\x05\x06',
 
+    ),
+    "RTF": (
+        b'{\\rtf1',
+    ),
+    "EXE": (
+         b'MZ',  # DOS MZ executable
+        b'MZ\x90\x00',  # PE executable
     )
 }
 
@@ -132,7 +139,7 @@ class Carver:
                             case "EXE":
                                 exe_extractor = exe.EXEExtractor(self.data[match.start():])
                                 exe_extractor.extract_file(f"extracted_{match.start()}.exe")
-                                
+
 
                 except Exception as e:
                     print(f"Unexpected error occurred. {e}")
