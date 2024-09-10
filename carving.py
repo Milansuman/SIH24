@@ -3,7 +3,6 @@ FILE CARVING MODULE
 """
 import re
 
-
 magic_nums = {
     "JPG": (
         b'\xFF\xD8\xFF\xD8',
