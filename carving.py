@@ -58,7 +58,6 @@ magic_nums = {
     "ODS": (
          b'PK\x03\x04',
         b'PK\x05\x06',
-
     ),
     "RTF": (
         b'{\\rtf1',
