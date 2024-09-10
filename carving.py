@@ -17,6 +17,9 @@ magic_nums = {
         b'<html>',
         b'<!DOCTYPE html>',
         b'<!doctype html>'
+    ),
+     "PDF": (
+        b'%PDF-',
     )
 }
 
@@ -48,6 +51,23 @@ class HTMLExtractor:
         with open(path, "wb") as file:
             file.write(self.data[:self.possible_ends[0]+7])
 
+class PDFExtractor:
+    def __init__(self, partial_data):
+        self.data = partial_data
+        self.possible_ends = []
+
+        for match in re.finditer(b'%%EOF', partial_data):
+            self.possible_ends.append(match.start())
+
+        print(self.possible_ends)
+    
+    def extract_file(self, path):
+        if not self.possible_ends:
+            print("No PDF end marker found")
+            return
+        with open(path, "wb") as file:
+            file.write(self.data[:self.possible_ends[-1]+5])
+
 class Carver:
     def __init__(self, path):
         self.path = path
@@ -72,5 +92,6 @@ class Carver:
                 except Exception as e:
                     print("Unexpected error occurred.")
             
-carver = Carver("../test.iso")
-carver.extractFiles()
+with open("Tutorial6.pdf", 'rb') as file:
+    pdf_extractor = PDFExtractor(file.read())
+    pdf_extractor.extract_file("recover.pdf")
