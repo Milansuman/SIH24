@@ -48,5 +48,6 @@ class Carver:
                         # elif file_type == "ZIP":
                         #     zip_extractor = ZIPExtractor(self.data[match.start():])
                         #     zip_extractor.extract_file(f"extracted_{match.start()}.zip")
+                        
                 except Exception as e:
                     print("Unexpected error occurred.")
