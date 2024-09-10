@@ -15,6 +15,11 @@ magic_nums = {
     ),
     "ZIP": (
         b'\x50\x4B\x03\x04',
+    ),
+    "HTML": (
+        b'<html>',
+        b'<!DOCTYPE html>',
+        b'<!doctype html>'
     )
 }
 
@@ -49,18 +54,37 @@ class ZIPExtractor:
                 file.write(self.data[:self.possible_ends[-1] + 22])
         else:
             print("No valid ZIP end structure found")
+        
+class HTMLExtractor:
+    def __init__(self, partial_data):
+        self.data = partial_data
+        self.possible_ends = []
+
+        for match in re.finditer(b'</html>', partial_data):
+            self.possible_ends.append(match.start())
+
+        print(self.possible_ends)
+    
+    def extract_file(self, path):
+        if self.possible_ends:
+            with open(path, "wb") as file:
+                # Write data up to and including the End of Central Directory record
+                file.write(self.data[:self.possible_ends[-1] + 22])
+        else:
+            print("No valid ZIP end structure found")
 
 class Carver:
     def __init__(self, path):
         self.path = path
         self.data = b''
         self.indexes = []
+        self.readData()
     
     def readData(self):
         with open(self.path, "rb") as file:
             self.data = file.read()
     
-    def findOffsets(self):
+    def extractFiles(self):
         for file_type in magic_nums:
             for byte_string in magic_nums[file_type]:
                 try:
@@ -74,9 +98,7 @@ class Carver:
                             zip_extractor = ZIPExtractor(self.data[match.start():])
                             zip_extractor.extract_file(f"extracted_{match.start()}.zip")
                 except Exception as e:
-                    print(f"Unexpected error occurred: {e}")
-
-
-with open("SIH.zip", 'rb') as file:
-    zip_extractor = ZIPExtractor(file.read())
-    zip_extractor.extract_file("recover.zip")
+                    print("Unexpected error occurred.")
+            
+carver = Carver("../test.iso")
+carver.extractFiles()
