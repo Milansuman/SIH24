@@ -2,7 +2,7 @@
 FILE CARVING MODULE
 """
 import re
-from extractors import html, jpg, png, zip, rar
+from extractors import html, jpg, png, zip, rar,gif,pdf,ppt
 
 magic_nums = {
     "JPG": (
@@ -69,6 +69,20 @@ class Carver:
                             case "ZIP":
                                 zip_extractor = zip.ZIPExtractor(self.data[match.start():])
                                 zip_extractor.extract_file(f"extracted_{match.start()}.zip")
+                            case "HTML":
+                                html_extractor = html.HTMLExtractor(self.data[match.start():])
+                                html_extractor.extract_file(f"extracted_{match.start()}.html")
+                            case "GIF":
+                                gif_extractor = gif.GIFExtractor(self.data[match.start():])
+                                gif_extractor.extract_file(f"extracted_{match.start()}.gif")
+                            case "PPT":
+                                ppt_extractor = ppt.PPTExtractor(self.data[match.start():])
+                                ppt_extractor.extract_file(f"extracted_{match.start()}.ppt")
+                            case "PDF":
+                                pdf_extractor = pdf.PDFExtractor(self.data[match.start():])
+                                pdf_extractor.extract_file(f"extracted_{match.start()}.pdf")
+                            
+
 
                 except Exception as e:
                     print("Unexpected error occurred.")
