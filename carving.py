@@ -21,7 +21,19 @@ magic_nums = {
         b'<html>',
         b'<!DOCTYPE html>',
         b'<!doctype html>'
-    )
+    ),
+    "GIF": (
+        b'\x47\x49\x46\x38\x37\x61',
+        b'\x47\x49\x46\x38\x39\x61'
+    ),
+    "PPT":(
+        b'\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1',
+),"%PDF":(
+        b'\x25\x50\x44\x46',
+),
+
+
+    
 }
 
 class Carver:
