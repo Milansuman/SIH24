@@ -12,7 +12,12 @@ magic_nums = {
     ),
     "PNG": (
         b'\x89\x50\x4E\x47\x0D\x0A\x1A\x0A',
+    ), 
+    "GIF": (
+        b'GIF87a',
+        b'GIF89a',
     )
+
 }
 
 class JPGExtractor:
@@ -28,9 +33,24 @@ class JPGExtractor:
     def extract_file(self, path):
         with open(path, "wb") as file:
             file.write(self.data[:self.possible_ends[0]])
+
+class GIFExtractor:
+    def __init__(self, partial_data):
+        self.data = partial_data
+        self.possible_ends = []
+
+        for match in re.finditer(b'\x00\x3B', partial_data):  # GIF file terminator
+            self.possible_ends.append(match.start() + 2)  # Include the terminator
+
+        print(self.possible_ends)
+    
+    def extract_file(self, path):
+        if self.possible_ends:
+            with open(path, "wb") as file:
+                file.write(self.data[:self.possible_ends[-1]])
+        else:
+            print("No valid GIF end marker found.")
         
-
-
 class Carver:
     def __init__(self, path):
         self.path = path
@@ -54,7 +74,8 @@ class Carver:
                             jpg_extractor.extract_file("test.jpg")
                 except Exception as e:
                     print("Unexpected error occurred.")
+
+with open('test2.gif','rb') as file:
+    zip_extractors = GIFExtractor(file.read())
+    zip_extractors.extract_file('recover.gif')
             
-carver = Carver("../test.iso")
-carver.readData()
-carver.findOffsets()
