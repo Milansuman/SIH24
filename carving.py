@@ -3,6 +3,7 @@ FILE CARVING MODULE
 """
 import re
 
+
 magic_nums = {
     "JPG": (
         b'\xFF\xD8\xFF\xD8',
@@ -28,8 +29,11 @@ class JPGExtractor:
     def extract_file(self, path):
         with open(path, "wb") as file:
             file.write(self.data[:self.possible_ends[0]])
-        
 
+class PNGExtractor:
+    def __init__(self, partial_data):
+        self.data = partial_data
+        
 
 class Carver:
     def __init__(self, path):
@@ -54,7 +58,3 @@ class Carver:
                             jpg_extractor.extract_file("test.jpg")
                 except Exception as e:
                     print("Unexpected error occurred.")
-            
-carver = Carver("../test.iso")
-carver.readData()
-carver.findOffsets()
