@@ -59,6 +59,16 @@ class Carver:
                         # elif file_type == "ZIP":
                         #     zip_extractor = ZIPExtractor(self.data[match.start():])
                         #     zip_extractor.extract_file(f"extracted_{match.start()}.zip")
+                        match file_type:
+                            case "JPG":
+                                jpg_extractor = jpg.JPGExtractor(self.data[match.start():])
+                                jpg_extractor.extract_file(f"extracted_{match.start()}.jpg")
+                            case "PNG":
+                                png_extractor = png.PNGExtractor(self.data[match.start():])
+                                png_extractor.extract_file(f"extracted_{match.start()}.jpg")
+                            case "ZIP":
+                                zip_extractor = zip.ZIPExtractor(self.data[match.start():])
+                                zip_extractor.extract_file(f"extracted_{match.start()}.zip")
 
                 except Exception as e:
                     print("Unexpected error occurred.")
