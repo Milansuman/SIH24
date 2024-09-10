@@ -13,6 +13,11 @@ magic_nums = {
     ),
     "PNG": (
         b'\x89\x50\x4E\x47\x0D\x0A\x1A\x0A',
+    ),
+    "HTML": (
+        b'<html>',
+        b'<!DOCTYPE html>',
+        b'<!doctype html>'
     )
 }
 
@@ -34,19 +39,33 @@ class PNGExtractor:
     def __init__(self, partial_data):
         self.data = partial_data
         
+        
+class HTMLExtractor:
+    def __init__(self, partial_data):
+        self.data = partial_data
+        self.possible_ends = []
+
+        for match in re.finditer(b'</html>', partial_data):
+            self.possible_ends.append(match.start())
+
+        print(self.possible_ends)
+    
+    def extract_file(self, path):
+        with open(path, "wb") as file:
+            file.write(self.data[:self.possible_ends[0]+7])
 
 class Carver:
     def __init__(self, path):
         self.path = path
         self.data = b''
         self.indexes = []
+        self.readData()
     
     def readData(self):
         with open(self.path, "rb") as file:
-            self.data = file.read()
-            
+            self.data = file.read()      
     
-    def findOffsets(self):
+    def extractFiles(self):
         for file_type in magic_nums:
             for byte_string in magic_nums[file_type]:
                 try:
@@ -58,3 +77,6 @@ class Carver:
                             jpg_extractor.extract_file("test.jpg")
                 except Exception as e:
                     print("Unexpected error occurred.")
+            
+carver = Carver("../test.iso")
+carver.extractFiles()
