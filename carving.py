@@ -2,7 +2,7 @@
 FILE CARVING MODULE
 """
 import re
-from extractors import html, jpg, png, zip, rar
+from extractors import html, jpg, png, zip, rar,gif,pdf,ppt,tif,odt,docx
 
 magic_nums = {
     "JPG": (
@@ -24,7 +24,25 @@ magic_nums = {
     ),
     "DOCX": (
         b'\x50\x4B\x03\x04\x14\x00\x06\x00'
+    ),
+    "GIF": (
+        b'\x47\x49\x46\x38\x37\x61',
+        b'\x47\x49\x46\x38\x39\x61'
+    ),
+    "PPT":(
+        b'\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1',
+    ),
+    "PDF":(
+        b'\x25\x50\x44\x46\x2D',
+    ),
+    "TIF":(
+        b'\x49\x49\x2A\x00',
+        b'\x4D\x4D\x00\x2A'
+    ),
+    "ODT":(
+         b'PK\x03\x04\x14\x00\x00\x00\x00\x00',
     )
+
 }
 
 class Carver:
@@ -45,11 +63,39 @@ class Carver:
                     for match in re.finditer(byte_string, self.data):
                         print(f"{file_type}: {match.start()}")
 
-                        # if file_type == "JPG":
-                        #     jpg_extractor = JPGExtractor(self.data[match.start():])
-                        #     jpg_extractor.extract_file(f"extracted_{match.start()}.jpg")
-                        # elif file_type == "ZIP":
-                        #     zip_extractor = ZIPExtractor(self.data[match.start():])
-                        #     zip_extractor.extract_file(f"extracted_{match.start()}.zip")
+                        match file_type:
+                            case "JPG":
+                                jpg_extractor = jpg.JPGExtractor(self.data[match.start():])
+                                jpg_extractor.extract_file(f"extracted_{match.start()}.jpg")
+                            case "PNG":
+                                png_extractor = png.PNGExtractor(self.data[match.start():])
+                                png_extractor.extract_file(f"extracted_{match.start()}.png")
+                            case "ZIP":
+                                zip_extractor = zip.ZIPExtractor(self.data[match.start():])
+                                zip_extractor.extract_file(f"extracted_{match.start()}.zip")
+                            case "HTML":
+                                html_extractor = html.HTMLExtractor(self.data[match.start():])
+                                html_extractor.extract_file(f"extracted_{match.start()}.html")
+                            case "GIF":
+                                gif_extractor = gif.GIFExtractor(self.data[match.start():])
+                                gif_extractor.extract_file(f"extracted_{match.start()}.gif")
+                            case "PPT":
+                                ppt_extractor = ppt.PPTExtractor(self.data[match.start():])
+                                ppt_extractor.extract_file(f"extracted_{match.start()}.ppt")
+                            case "PDF":
+                                pdf_extractor = pdf.PDFExtractor(self.data[match.start():])
+                                pdf_extractor.extract_file(f"extracted_{match.start()}.pdf")
+                            case "TIF":
+                                tif_extractor = tif.TIFExtractor(self.data[match.start():])
+                                tif_extractor.extract_file(f"extracted_{match.start()}.tif")
+                            case "ODT":
+                                odt_extractor = odt.ODTExtractor(self.data[match.start():])
+                                odt_extractor.extract_file(f"extracted_{match.start()}.odt")
+                            case "DOCX":
+                                docx_extractor = docx.DOCXExtractor(self.data[match.start():])
+                                docx_extractor.extract_file(f"extracted_{match.start()}.docx")
+                            
+
+
                 except Exception as e:
-                    print("Unexpected error occurred.")
+                    print(f"Unexpected error occurred. {e}")
