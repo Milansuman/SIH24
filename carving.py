@@ -2,7 +2,7 @@
 FILE CARVING MODULE
 """
 import re
-from extractors import html, jpg, png, zip,rar,gif,pdf,ppt,tif,odt,docx,xls,xlsx,odp,ods,rtf,exe
+from extractors import html, jpg, png, zip,rar,gif,pdf,ppt,tif,odt,docx,xls,xlsx,odp,ods,rtf,exe,sh,log
 
 magic_nums = {
     "JPG": (
@@ -65,6 +65,18 @@ magic_nums = {
     "EXE": (
          b'MZ',  # DOS MZ executable
         b'MZ\x90\x00',  # PE executable
+    ),
+    "LOG": (
+         b'[INFO]',
+        b'[ERROR]',
+        b'[WARNING]',
+        b'[DEBUG]',
+        b'\d{4}-\d{2}-\d{2}',
+    )
+    ,"SH":(
+        b"#!/bin/sh",
+        b"#!/bin/bash",
+        b"#!/usr/bin/env bash",
     )
 }
 
@@ -138,6 +150,12 @@ class Carver:
                             case "EXE":
                                 exe_extractor = exe.EXEExtractor(self.data[match.start():])
                                 exe_extractor.extract_file(f"extracted_{match.start()}.exe")
+                            case "LOG":
+                                log_extractor = log.LOGExtractor(self.data[match.start():])
+                                log_extractor.extract_file(f"extracted_{match.start()}.log")
+                            case "SH":
+                                sh_extractor = sh.SHExtractor(self.data[match.start():])
+                                sh_extractor.extract_file(f"extracted_{match.start()}.sh")
 
 
                 except Exception as e:
