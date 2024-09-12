@@ -73,11 +73,6 @@ magic_nums = {
         b'[DEBUG]',
         b'\d{4}-\d{2}-\d{2}',
     )
-    ,"SH":(
-        b"#!/bin/sh",
-        b"#!/bin/bash",
-        b"#!/usr/bin/env bash",
-    )
 }
 
 class Carver:
